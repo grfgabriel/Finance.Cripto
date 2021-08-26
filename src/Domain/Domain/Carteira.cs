@@ -10,50 +10,65 @@ namespace Domain
         public Carteira(TipoCarteira tipoCarteira)
         {
             _id = new Guid();
-            Ativos = new List<Ativo>();
+            Lancamentos = new List<Lancamento>();
             TipoCarteira = tipoCarteira;
         }
 
         public Guid _id { get; private set; }
-        public List<Ativo> Ativos { get; private set; }
+        public List<Lancamento> Lancamentos { get; private set; }
         public TipoCarteira TipoCarteira { get; private set; }
         public decimal PorcentagemDeLucro { get; private set; }
         public decimal ValorTotalBruto { get; private set; }
         public decimal ValorTotalAtualizado { get; private set; }
-        public decimal ValorUnitarioDoAtivoAtualizado { get; private set; }
+        public decimal ValorUnitarioDaCarteiraAtualizada { get; private set; }
         public decimal Lucro { get; private set; }
         public decimal QuantidadeTotal { get; private set; }
 
-        public void AdicionarAtivo(Ativo ativo)
+        public void NovoLancamento(Lancamento lancamento)
         {
-            //Todo: O tipo da carteira precisa ser o mesmo tipo do ativo?
-            Ativos.Add(ativo);
-            CalcularQuantidadeTotal(ativo);
-            CalcularValorTotalBruto(ativo);
+            Lancamentos.Add(lancamento);
+            CalcularQuantidadeTotal(lancamento);
+            CalcularValorTotalBruto(lancamento);
         }
-        private void CalcularQuantidadeTotal(Ativo ativo)
+        private void CalcularQuantidadeTotal(Lancamento lancamento)
         {
-            QuantidadeTotal = QuantidadeTotal + ativo.Quantidade;
+            QuantidadeTotal = QuantidadeTotal + lancamento.Quantidade;
         }
 
-        private void CalcularValorTotalBruto(Ativo ativo)
+        private void CalcularValorTotalBruto(Lancamento lancamento)
         {
-            ValorTotalBruto = ValorTotalBruto + ativo.ValorUnitarioNaCompra / ativo.Quantidade;
+            ValorTotalBruto = ValorTotalBruto + lancamento.Custo;
+            ValorTotalBruto = Decimal.Round(ValorTotalBruto, 2);
+
         }
-        public void AtualizarValorDoAtivo(decimal valorUnitarioDoAtivoAtualizado)
+
+        public void AtualizarValorDaCarteira(decimal valorUnitarioDaCarteiraAtualizada)
         {
-            ValorUnitarioDoAtivoAtualizado = valorUnitarioDoAtivoAtualizado;
+            ValorUnitarioDaCarteiraAtualizada = valorUnitarioDaCarteiraAtualizada;
+            CalculaValorTotalDaCarteira();
             CalcularLucro();
             CalcularPorcentagemDeLucro();
         }
+
         private void CalcularLucro()
         {
-            Lucro = ValorTotalBruto - ValorTotalAtualizado;
+            Lucro = ValorTotalAtualizado - ValorTotalBruto;
+        }
+
+        private void CalculaValorTotalDaCarteira()
+        {
+            ValorTotalAtualizado = QuantidadeTotal * ValorUnitarioDaCarteiraAtualizada;
+            ValorTotalAtualizado = Decimal.Round(ValorTotalAtualizado, 2);
+
         }
 
         private void CalcularPorcentagemDeLucro()
         {
-            PorcentagemDeLucro = (ValorTotalAtualizado - ValorTotalBruto) / ValorTotalBruto;
+            if(ValorTotalBruto > 0)
+            {
+                PorcentagemDeLucro = (ValorTotalAtualizado - ValorTotalBruto) / ValorTotalBruto * 100;
+                PorcentagemDeLucro = Decimal.Round(PorcentagemDeLucro, 2);
+            }
         }
     }
 }

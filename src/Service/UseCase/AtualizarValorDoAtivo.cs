@@ -11,11 +11,12 @@ namespace Service.UseCase
 
         private readonly ICarteiraRepository _carteiraRepository;
 
-
         public async Task Handler(AtualizarValorDoAtivoInput input)
         {
-            var carteira = await _carteiraRepository.Get(input.TipoCarteira);
-            carteira.AtualizarValorDoAtivo(input.ValorUnitarioDoAtivoAtualizado);
+            var carteira = await _carteiraRepository.GetAsync(input.TipoCarteira);
+            carteira.AtualizarValorDaCarteira(input.ValorUnitarioDoAtivoAtualizado);
+
+            await _carteiraRepository.UpdateAsync(carteira);
         }
     }
 }

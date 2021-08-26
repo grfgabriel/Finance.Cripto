@@ -5,7 +5,9 @@ namespace Domain.Data.Interface
 {
     public interface ICarteiraRepository
     {
-        Task Create(Carteira carteira);
-        Task<Carteira> Get(TipoCarteira tipoCarteira);
+        Task CreateAsync(Carteira carteira);
+        Task<Carteira> GetAsync(TipoCarteira tipoCarteira);
+        Task UpdateAsync(Carteira tipoCarteira);
+
     }
 }

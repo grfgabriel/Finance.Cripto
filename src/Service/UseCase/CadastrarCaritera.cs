@@ -13,7 +13,7 @@ namespace Service.UseCase
         public async Task Handler(CadastrarCariteraInput input)
         {
             Carteira carteira = new Carteira(input.tipoCarteira);
-            await _carteiraRepository.Create(carteira);
+            await _carteiraRepository.CreateAsync(carteira);
         }
     }
 }
