@@ -14,7 +14,6 @@ namespace Function
 {
     public class Carteira
     {
-
         private readonly IMediator _mediator;
         private readonly ILogger<Carteira> _logger;
 
